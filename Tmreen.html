@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>جدول حكووم | تمارين منزلية</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --main: #1effa8;
+      --main-rgb: 30, 255, 168;
+      --bg: #030303;
+      --bg2: #080808;
+      --card: #0c0c0c;
+      --card2: #111;
+      --text: #f0f0f0;
+      --sub: #999;
+      --border: rgba(255, 255, 255, 0.06);
+      --border2: rgba(255, 255, 255, 0.12);
+      --hover: rgba(255, 255, 255, 0.04);
+      --glass: rgba(10, 10, 10, 0.8);
+      --radius: 24px;
+      --radius2: 18px;
+      --transition: 0.35s cubic-bezier(0.25, 0.8, 0.25, 1.2);
+    }
+    body.light-mode {
+      --bg: #f7f5f0;
+      --bg2: #efece6;
+      --card: #ffffff;
+      --card2: #fafaf8;
+      --text: #1a1a1a;
+      --sub: #666;
+      --border: rgba(0, 0, 0, 0.07);
+      --border2: rgba(0, 0, 0, 0.1);
+      --hover: rgba(0, 0, 0, 0.03);
+      --glass: rgba(255, 255, 255, 0.75);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      transition: background 0.5s, color 0.5s;
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    /* خلفية متحركة */
+    body::before {
+      content: '';
+      position: fixed;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(ellipse at 30% 20%, rgba(var(--main-rgb),0.03) 0%, transparent 60%),
+                  radial-gradient(ellipse at 70% 60%, rgba(var(--main-rgb),0.04) 0%, transparent 60%);
+      pointer-events: none; z-index: -1;
+      animation: bgShift 22s ease-in-out infinite;
+    }
+    @keyframes bgShift {
+      0%,100% { transform: translate(0,0); }
+      33% { transform: translate(2%,-1%); }
+      66% { transform: translate(-1%,2%); }
+    }
+
+    /* ======= الهيدر ======= */
+    header {
+      position: sticky; top: 0; z-index: 1000;
+      backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+      background: var(--glass);
+      border-bottom: 1px solid var(--border);
+      padding: 8px 0;
+    }
+    .nav-container {
+      width: 93%; max-width: 1400px; margin: auto;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 12px;
+    }
+    .logo-link {
+      display: flex; align-items: center; gap: 10px;
+      font-weight: 900; font-size: 1.4rem; color: var(--text);
+      transition: 0.3s;
+    }
+    .logo-link:hover { transform: scale(1.03); }
+    .logo-icon {
+      width: 44px; height: 44px;
+      background: var(--main);
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 28px rgba(var(--main-rgb), 0.5);
+    }
+    .logo-icon svg { width: 28px; height: 28px; fill: #000; }
+    .tab-links {
+      display: flex; gap: 4px; background: var(--hover);
+      padding: 5px; border-radius: 30px; border: 1px solid var(--border);
+    }
+    .tab-links a {
+      padding: 8px 18px; border-radius: 24px;
+      font-weight: 700; font-size: 0.9rem; color: var(--sub);
+      transition: 0.3s; white-space: nowrap; cursor: pointer;
+    }
+    .tab-links a.active {
+      background: var(--main); color: #000;
+      box-shadow: 0 6px 20px rgba(var(--main-rgb), 0.4);
+    }
+    .tab-links a:hover:not(.active) { background: var(--border2); color: var(--text); }
+
+    .burger-btn {
+      display: none; background: none; border: none;
+      cursor: pointer; padding: 6px; flex-direction: column;
+      gap: 5px; width: 36px; height: 28px; justify-content: center;
+    }
+    .burger-btn span {
+      display: block; width: 100%; height: 3px;
+      background: var(--text); border-radius: 3px; transition: 0.35s;
+    }
+    .burger-btn.open span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+    .burger-btn.open span:nth-child(2) { opacity: 0; }
+    .burger-btn.open span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+
+    .side-menu {
+      position: fixed; top: 0; right: -320px; width: 280px;
+      height: 100vh; background: var(--glass); backdrop-filter: blur(25px);
+      z-index: 1050; transition: 0.4s; padding: 80px 25px 30px;
+      border-left: 1px solid var(--border); box-shadow: -8px 0 40px rgba(0,0,0,0.4);
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .side-menu.open { right: 0; }
+    .side-menu a {
+      padding: 14px 16px; border-radius: var(--radius2);
+      font-weight: 700; font-size: 1rem; transition: 0.25s;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .side-menu a:hover { background: var(--main); color: #000; }
+    .overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+      z-index: 1040; opacity: 0; pointer-events: none; transition: 0.4s;
+    }
+    .overlay.active { opacity: 1; pointer-events: all; }
+
+    /* ======= حاويات الصفحات ======= */
+    .page {
+      display: none;
+      width: 93%; max-width: 1300px; margin: 0 auto;
+      padding: 30px 0 50px;
+    }
+    .page.active { display: block; }
+
+    .section-title {
+      font-size: 2rem; font-weight: 900;
+      margin: 20px 0 20px; display: flex; align-items: center; gap: 10px;
+    }
+
+    /* ======= صفحة الرئيسية ======= */
+    .hero {
+      text-align: center; padding: 40px 20px 30px;
+    }
+    .hero .basmala {
+      font-size: 1.1rem; color: var(--sub); margin-bottom: 15px;
+      font-weight: 600; opacity: 0.9;
+    }
+    .hero h1 {
+      font-size: clamp(2.5rem, 7vw, 4.5rem);
+      font-weight: 900; line-height: 1.2; margin-bottom: 8px;
+    }
+    .hero h1 .highlight {
+      color: var(--main);
+      text-shadow: 0 0 50px rgba(var(--main-rgb), 0.6);
+    }
+    .hero p { color: var(--sub); font-size: 1.1rem; max-width: 500px; margin: 0 auto; }
+
+    /* ======= الإحماء ======= */
+    .warmup-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 28px; margin-top: 10px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    }
+    .warmup-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
+      gap: 14px; margin-top: 15px;
+    }
+    .warmup-item {
+      background: var(--hover); border-radius: var(--radius2);
+      padding: 15px; display: flex; align-items: center; gap: 10px;
+      font-weight: 600; border: 1px solid var(--border);
+    }
+
+    /* ======= صفحة التمارين (اختيار يوم) ======= */
+    .days-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 18px; margin-top: 20px;
+    }
+    .day-btn {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 22px 18px;
+      text-align: center; font-weight: 800; font-size: 1rem;
+      transition: 0.3s; cursor: pointer;
+      box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    .day-btn:hover {
+      border-color: var(--main); transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(var(--main-rgb),0.2);
+    }
+    .day-btn .day-num { font-size: 1.9rem; color: var(--main); }
+
+    /* ======= عرض يوم محدد ======= */
+    .day-detail {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 25px;
+      margin-top: 10px; box-shadow: 0 10px 40px rgba(0,0,0,0.35);
+    }
+    .back-btn {
+      background: none; border: 1px solid var(--border2);
+      color: var(--text); padding: 8px 18px; border-radius: 20px;
+      font-weight: 700; cursor: pointer; margin-bottom: 20px;
+      transition: 0.3s; font-family: 'Cairo', sans-serif;
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .back-btn:hover { background: var(--hover); border-color: var(--main); }
+
+    .exercise {
+      background: var(--hover); border-radius: var(--radius2);
+      padding: 18px 20px; margin-bottom: 12px;
+      border: 1px solid var(--border); transition: 0.3s;
+    }
+    .exercise:hover { border-color: rgba(var(--main-rgb),0.3); }
+    .exercise-header {
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 12px; flex-wrap: wrap;
+    }
+    .exercise h3 { color: var(--main); font-size: 1.1rem; font-weight: 700; flex:1; }
+    .exercise p { color: var(--sub); margin: 8px 0 10px; font-size: 0.9rem; }
+    .sets {
+      background: rgba(var(--main-rgb),0.1); padding: 5px 12px;
+      border-radius: 12px; font-weight: 700; color: var(--main);
+      display: inline-block; font-size: 0.85rem;
+    }
+    .warmup-reminder {
+      background: rgba(var(--main-rgb),0.05); border: 1px dashed var(--main);
+      border-radius: var(--radius2); padding: 12px 16px;
+      margin-bottom: 18px; font-weight: 600; color: var(--main);
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    /* تشيك بوكس محسن */
+    .check-wrapper input {
+      appearance: none; -webkit-appearance: none;
+      width: 26px; height: 26px;
+      border: 2px solid var(--border2); border-radius: 8px;
+      background: var(--card2); cursor: pointer; transition: 0.3s;
+    }
+    .check-wrapper input:checked {
+      background: var(--main); border-color: var(--main);
+      box-shadow: 0 0 16px rgba(var(--main-rgb),0.5);
+    }
+    .check-wrapper input:checked::after {
+      content: ''; display: block; width: 7px; height: 12px;
+      border: solid #000; border-width: 0 3px 3px 0;
+      transform: rotate(45deg); margin: 4px auto;
+    }
+    .exercise.done { opacity: 0.65; }
+    .exercise.done h3 { text-decoration: line-through; text-decoration-color: var(--main); }
+
+    /* ======= الإعدادات ======= */
+    .settings-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 30px;
+      max-width: 500px; margin: 20px auto;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    }
+    .color-row {
+      display: flex; gap: 14px; align-items: center; margin: 20px 0;
+      flex-wrap: wrap;
+    }
+    .color-dot {
+      width: 34px; height: 34px; border-radius: 50%;
+      cursor: pointer; border: 2px solid white;
+      transition: 0.25s;
+    }
+    .color-dot.active { box-shadow: 0 0 22px currentColor; transform: scale(1.15); }
+    .theme-btn {
+      background: var(--main); border: none; color: #000;
+      font-weight: 800; padding: 12px 24px; border-radius: 30px;
+      cursor: pointer; font-size: 1rem; font-family: 'Cairo', sans-serif;
+      transition: 0.3s; display: flex; align-items: center; gap: 8px;
+    }
+    .theme-btn:hover { box-shadow: 0 8px 28px rgba(var(--main-rgb),0.5); }
+
+    footer {
+      text-align: center; padding: 30px; color: var(--sub);
+      border-top: 1px solid var(--border); margin-top: 40px;
+      font-weight: 700; font-size: 1.1rem;
+    }
+
+    @media (max-width: 750px) {
+      .tab-links { display: none; }
+      .burger-btn { display: flex; }
+      .hero h1 { font-size: 2rem; }
+      .days-grid { grid-template-columns: repeat(auto-fit, minmax(130px,1fr)); }
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay" id="overlay"></div>
+  <nav class="side-menu" id="sideMenu">
+    <a data-page="home">🏠 الرئيسية</a>
+    <a data-page="warmup">🧘 الإحماء</a>
+    <a data-page="schedule">📅 التمارين</a>
+    <a data-page="settings">⚙️ الإعدادات</a>
+  </nav>
+
+  <header>
+    <div class="nav-container">
+      <a class="logo-link" data-page="home">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M20.57 10.34L17.43 7.2l1.17-1.17A2 2 0 1 0 16.2 3.6L15 4.83l-3.66-3.66a1 1 0 0 0-1.41 0l-8.49 8.49a1 1 0 0 0 0 1.41l12.73 12.73a1 1 0 0 0 1.41 0l4.95-4.95a2 2 0 1 0-2.83-2.83l-1.17 1.17L13.5 14.4l-2.12 2.12 1.41 1.41 2.12-2.12 3.66 3.66a1 1 0 0 0 1.41 0l2.12-2.12a1 1 0 0 0 0-1.41zM5.07 11.66l5.3-5.3 2.12 2.12-5.3 5.3z"/>
+          </svg>
+        </div>
+        <span>جدول حكووم</span>
+      </a>
+
+      <div class="tab-links">
+        <a data-page="home" class="active">🏠 الرئيسية</a>
+        <a data-page="warmup">🧘 الإحماء</a>
+        <a data-page="schedule">📅 التمارين</a>
+        <a data-page="settings">⚙️ الإعدادات</a>
+      </div>
+
+      <button class="burger-btn" id="burgerBtn"><span></span><span></span><span></span></button>
+    </div>
+  </header>
+
+  <!-- ========== الصفحات ========== -->
+  <div class="page active" id="page-home">
+    <div class="hero">
+      <div class="basmala">وما توفيقي إلا بالله</div>
+      <h1>حوّل <span class="highlight">منزلك</span> إلى صالة</h1>
+      <p>تمارين منزلية بالبار والأثقال · برنامج متكامل 7 أيام</p>
+    </div>
+  </div>
+
+  <div class="page" id="page-warmup">
+    <h2 class="section-title">🔥 الإحماء الثابت (5-7 دقائق)</h2>
+    <div class="warmup-card">
+      <p style="color:var(--sub); margin-bottom:10px;">إلزامي قبل كل يوم تدريبي</p>
+      <div class="warmup-grid">
+        <div class="warmup-item">🏃 جري في المكان – دقيقة</div>
+        <div class="warmup-item">🤸 Jumping Jacks – 30 ثانية</div>
+        <div class="warmup-item">💪 دوائر الذراعين – 30ث أمام + 30ث خلف</div>
+        <div class="warmup-item">🌀 دوران الجذع – 30 ثانية</div>
+        <div class="warmup-item">🦵 طعنات بدون وزن – 10 لكل رجل</div>
+        <div class="warmup-item">🔥 قرفصاء هوائي – 15 عدة</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page" id="page-schedule">
+    <!-- قائمة الأيام أو عرض يوم محدد -->
+    <div id="daysList">
+      <h2 class="section-title">📅 اختر يوم التمرين</h2>
+      <div class="days-grid" id="daysGrid"></div>
+    </div>
+    <div id="dayDetail" style="display:none;"></div>
+  </div>
+
+  <div class="page" id="page-settings">
+    <h2 class="section-title">⚙️ تخصيص المظهر</h2>
+    <div class="settings-card">
+      <p style="color:var(--sub); margin-bottom:10px;">اختر اللون الرئيسي</p>
+      <div class="color-row" id="colorPicker">
+        <div class="color-dot active" style="background:#1effa8;" data-color="#1effa8"></div>
+        <div class="color-dot" style="background:#00bfff;" data-color="#00bfff"></div>
+        <div class="color-dot" style="background:#ff4d6d;" data-color="#ff4d6d"></div>
+        <div class="color-dot" style="background:#ffb700;" data-color="#ffb700"></div>
+        <div class="color-dot" style="background:#a855f7;" data-color="#a855f7"></div>
+      </div>
+      <hr style="border-color:var(--border); margin:25px 0;">
+      <p style="color:var(--sub); margin-bottom:10px;">وضع العرض</p>
+      <button class="theme-btn" id="themeToggleBtn">
+        <span>🌙</span> <span id="themeLabel">داكن</span>
+      </button>
+    </div>
+  </div>
+
+  <footer>
+    توكل على الله يا وحش 🔥
+  </footer>
+
+  <script>
+    (function() {
+      // ========== تعريف البيانات ==========
+      const daysData = [
+        {
+          num: 1, title: "الصدر · الأكتاف الأمامية · الترايسبس",
+          duration: "~40 دقيقة | استرح 60-90 ث",
+          exercises: [
+            { name: "ضغط الصدر على الأرض (Floor Press)", desc: "استلقِ على ظهرك على الأرض، وامسك البار بقبضة أوسع من الكتفين. اخفضه ببطء حتى يلمس مرفقاك الأرض، ثم ادفعه بقوة للأعلى.", sets: "4×10-12", note: "إذا لم تستطع 10 تكرارات، قلل الوزن. وإذا كان خفيفاً جداً، أبطئ النزول لـ3 ثوانٍ." },
+            { name: "ضغط الكتف جالساً (Seated Shoulder Press)", desc: "اجلس على كرسي بمسند ظهر، وامسك البار بقبضة أوسع من الكتفين عند مستوى الصدر العلوي. ادفع للأعلى حتى تستقيم ذراعاك دون قفل المرفقين.", sets: "3×10-12", note: "" },
+            { name: "فتح الصدر بالأثقال على الأرض (Dumbbell Flyes)", desc: "نفس وضعية ضغط الصدر لكن بأثقال يدوية. مد ذراعيك للأعلى مع ثني بسيط، اخفضهما للجانبين ثم ارفعهما.", sets: "3×12-15", note: "" },
+            { name: "الترايسبس بالبار على الأرض (Skull Crusher)", desc: "استلقِ وأمسك البار بقبضة ضيقة. ارفع الوزن عمودياً، ثم اثنِ مرفقيك ببطء لخفض البار باتجاه جبهتك (وليس فوقها).", sets: "3×10-12", note: "" }
+          ]
+        },
+        {
+          num: 2, title: "الظهر · الأكتاف الخلفية · البايسبس",
+          duration: "~40 دقيقة",
+          exercises: [
+            { name: "الانحناء بالتجديف (Bent Over Row)", desc: "قف مع مباعدة قدميك بعرض الكتفين، امسك البار بقبضة أوسع. انحنِ 45° بظهر مستقيم، واسحب البار لأسفل بطنك مع ضم لوحي الكتف.", sets: "4×10-12", note: "" },
+            { name: "التجديف على ذراع واحدة (One-Arm Dumbbell Row)", desc: "ضع ركبتك ويدك اليسرى على كرسي، وامسك الأثقال باليمنى. اسحب لجانب خصرك بظهر مستقيم. بدّل الجانب.", sets: "3×12 لكل جانب", note: "" },
+            { name: "رفرفة خلفية واقفاً (Bent Over Reverse Flyes)", desc: "بأثقال خفيفة، قف منحنياً بظهر مستقيم. ارفع ذراعيك للجانبين كأنك تفتح جناحين حتى توازي الأرض.", sets: "3×15", note: "ركّز على البطء" },
+            { name: "البايسبس بالبار واقفاً (Standing Barbell Curl)", desc: "قف مستقيمًا، امسك البار بقبضة بعرض الكتفين. ارفع البار نحو كتفيك مع تثبيت المرفقين.", sets: "3×10-12", note: "" }
+          ]
+        },
+        {
+          num: 3, title: "الأرجل · الأرداف · البطن",
+          duration: "~40 دقيقة",
+          exercises: [
+            { name: "القرفصاء الأمامي (Front Squat)", desc: "ضع البار على مقدمة كتفيك مع تقاطع ذراعيك. انزل ببطء حتى يوازي فخذاك الأرض، ثم ادفع بكعبيك.", sets: "4×10-12", note: "التقنية أهم من العمق" },
+            { name: "الطعنات بالدمبل (Dumbbell Lunges)", desc: "أمسك دمبل في كل يد، تقدم خطوة كبيرة للأمام، اخفض جسمك حتى تقترب الركبة الخلفية من الأرض.", sets: "3×10 لكل رجل", note: "" },
+            { name: "الرفعة الميتة بالأرجل المستقيمة (Stiff-Legged Deadlift)", desc: "قف ممسكاً بالبار مع ثني بسيط جداً بالركبتين. انحنِ من الوركين بظهر مستقيم لخفض البار لمنتصف الساق.", sets: "3×10", note: "كنز لعضلات باطن الركبة والأرداف" },
+            { name: "تمرين الجسر (Glute Bridge)", desc: "استلقِ على ظهرك مع ثني الركبتين، يمكن وضع دمبل خفيف على الحوض. ارفع وركيك للأعلى مع شد الأرداف.", sets: "3×15", note: "" },
+            { name: "اللوح الخشبي (Plank)", desc: "حافظ على استقامة الجسم من الكعبين للأكتاف، وشد البطن والأرداف بقوة.", sets: "3×45-60 ث", note: "" }
+          ]
+        },
+        {
+          num: 4, title: "راحة نشطة",
+          duration: "استشفاء",
+          exercises: [
+            { name: "المشي السريع في الهواء الطلق", desc: "امشِ لمدة 45-60 دقيقة. يساعد على حرق الدهون ويحسن المزاج والنوم.", sets: "45-60 دقيقة", note: "لا تهمل هذا اليوم!" }
+          ]
+        },
+        {
+          num: 5, title: "جسم علوي شامل (قوة وتضخيم)",
+          duration: "~45 دقيقة",
+          exercises: [
+            { name: "الضغط المائل بقبضة ضيقة (Floor Press - Close Grip)", desc: "نفس تمرين اليوم الأول لكن بقبضة ضيقة لاستهداف الترايسبس والصدر الداخلي.", sets: "4×8-10", note: "أقصى وزن بتقنية صحيحة" },
+            { name: "التجديف بالقبضة العكسية (Underhand Barbell Row)", desc: "مثل الانحناء بالتجديف لكن بقبضة من الأسفل لاستهداف البايسبس.", sets: "4×10-12", note: "" },
+            { name: "الضغط العلوي بالدمبل جالساً (Seated Dumbbell Press)", desc: "اجلس وادفع الدمبلز للأعلى حتى تستقيم ذراعاك.", sets: "3×10-12", note: "" },
+            { name: "سوبر-سيت للذراعين", desc: "أ. بايسبس بالمطرقة 3×10. ب. ترايسبس خلف الرأس 3×12. أدِّ التمرينين دون راحة.", sets: "3 جولات", note: "" }
+          ]
+        },
+        {
+          num: 6, title: "أرجل · أكتاف جانبية · بطن",
+          duration: "~40 دقيقة",
+          exercises: [
+            { name: "القرفصاء البلغاري (Bulgarian Split Squat)", desc: "ضع قدمك الخلفية على كرسي، وامسك دمبل في كل يد. اخفض ببطء.", sets: "4×10 لكل رجل", note: "ملك تمارين الأرجل المنزلية" },
+            { name: "رفع السمانة (Calf Raises)", desc: "قف ممسكاً بدمبل ثقيل، وارفع على أطراف أصابعك.", sets: "4×20", note: "" },
+            { name: "رفرفة جانبية (Lateral Raises)", desc: "واقفاً مع دمبلز خفيفة، ارفع ذراعيك للجانبين حتى مستوى الكتف.", sets: "4×15", note: "" },
+            { name: "دائرة البطن", desc: "الدراجة 3×20 لكل جانب + رفع الرجلين 3×15.", sets: "دائرة كاملة", note: "" }
+          ]
+        },
+        {
+          num: 7, title: "راحة كاملة",
+          duration: "يوم راحة",
+          exercises: [
+            { name: "لا تمارين اليوم", desc: "جسمك يحتاج الراحة الكاملة. نم جيداً وتناول طعاماً صحياً.", sets: "استرخاء", note: "" }
+          ]
+        }
+      ];
+
+      // ========== العناصر ==========
+      const body = document.body;
+      const root = document.documentElement;
+      const burgerBtn = document.getElementById('burgerBtn');
+      const sideMenu = document.getElementById('sideMenu');
+      const overlay = document.getElementById('overlay');
+      const themeToggleBtn = document.getElementById('themeToggleBtn');
+      const themeLabel = document.getElementById('themeLabel');
+      const colorPicker = document.getElementById('colorPicker');
+      const daysGrid = document.getElementById('daysGrid');
+      const dayDetail = document.getElementById('dayDetail');
+      const daysListDiv = document.getElementById('daysList');
+      const allPageLinks = document.querySelectorAll('[data-page]');
+      const pages = {
+        home: document.getElementById('page-home'),
+        warmup: document.getElementById('page-warmup'),
+        schedule: document.getElementById('page-schedule'),
+        settings: document.getElementById('page-settings')
+      };
+
+      // ========== دوال التنقل بين الصفحات ==========
+      function navigateTo(pageName) {
+        // إخفاء الكل
+        Object.values(pages).forEach(p => p?.classList.remove('active'));
+        pages[pageName]?.classList.add('active');
+        // تحديث التبويبات
+        allPageLinks.forEach(link => {
+          if (link.getAttribute('data-page') === pageName) link.classList.add('active');
+          else link.classList.remove('active');
+        });
+        // إذا كنا في صفحة التمارين، تأكد من عرض قائمة الأيام
+        if (pageName === 'schedule') {
+          daysListDiv.style.display = 'block';
+          dayDetail.style.display = 'none';
+        }
+        // إغلاق القائمة الجانبية
+        closeMenu();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      allPageLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const page = link.getAttribute('data-page');
+          if (page && pages[page]) navigateTo(page);
+        });
+      });
+
+      // ========== بناء قائمة الأيام ==========
+      function renderDaysList() {
+        daysGrid.innerHTML = '';
+        daysData.forEach((day, idx) => {
+          const btn = document.createElement('div');
+          btn.className = 'day-btn';
+          btn.innerHTML = `<span class="day-num">يوم ${day.num}</span><span>${day.title}</span>`;
+          btn.addEventListener('click', () => showDayDetail(idx));
+          daysGrid.appendChild(btn);
+        });
+      }
+
+      function showDayDetail(index) {
+        const day = daysData[index];
+        daysListDiv.style.display = 'none';
+        dayDetail.style.display = 'block';
+        let html = `<button class="back-btn" id="backToDays">← عودة للأيام</button>`;
+        html += `<div class="day-detail">`;
+        html += `<div style="color:var(--main); font-weight:800; margin-bottom:5px;">DAY ${day.num}</div>`;
+        html += `<h2 style="margin-bottom:5px;">${day.title}</h2>`;
+        html += `<p style="color:var(--sub); margin-bottom:15px;">⏱️ ${day.duration}</p>`;
+        html += `<div class="warmup-reminder">🔥 تذكير: أكمل الإحماء قبل البدء</div>`;
+        day.exercises.forEach((ex, i) => {
+          html += `<div class="exercise" data-day="${index}" data-ex="${i}">`;
+          html += `<div class="exercise-header"><h3>${ex.name}</h3><div class="check-wrapper"><input type="checkbox" class="check-box" data-day="${index}" data-ex="${i}"></div></div>`;
+          html += `<p>${ex.desc}</p>`;
+          html += `<span class="sets">${ex.sets}</span>`;
+          if (ex.note) html += `<p style="font-size:0.8rem; color:var(--sub); margin-top:6px;">💡 ${ex.note}</p>`;
+          html += `</div>`;
+        });
+        html += `</div>`;
+        dayDetail.innerHTML = html;
+        // ربط زر العودة
+        document.getElementById('backToDays')?.addEventListener('click', backToDaysList);
+        // تحميل حالات التشيك
+        loadChecksForDay(index);
+        // ربط التشيك بوكسات الجديدة
+        attachCheckEvents();
+      }
+
+      function backToDaysList() {
+        daysListDiv.style.display = 'block';
+        dayDetail.style.display = 'none';
+      }
+
+      // ========== نظام التشيك (حفظ/استرجاع) ==========
+      function getCheckKey(dayIdx, exIdx) {
+        return `hakoom_day${dayIdx}_ex${exIdx}`;
+      }
+
+      function attachCheckEvents() {
+        document.querySelectorAll('.check-box').forEach(cb => {
+          cb.addEventListener('change', function() {
+            const dayIdx = this.getAttribute('data-day');
+            const exIdx = this.getAttribute('data-ex');
+            if (dayIdx !== null && exIdx !== null) {
+              localStorage.setItem(getCheckKey(dayIdx, exIdx), this.checked);
+              const exerciseDiv = this.closest('.exercise');
+              if (exerciseDiv) {
+                exerciseDiv.classList.toggle('done', this.checked);
+              }
+            }
+          });
+        });
+      }
+
+      function loadChecksForDay(dayIdx) {
+        const exercises = document.querySelectorAll(`.exercise[data-day="${dayIdx}"]`);
+        exercises.forEach(exDiv => {
+          const exIdx = exDiv.getAttribute('data-ex');
+          const cb = exDiv.querySelector('.check-box');
+          if (cb && exIdx !== null) {
+            const checked = localStorage.getItem(getCheckKey(dayIdx, exIdx)) === 'true';
+            cb.checked = checked;
+            exDiv.classList.toggle('done', checked);
+          }
+        });
+      }
+
+      // ========== الثيم ==========
+      function setTheme(isLight) {
+        if (isLight) {
+          body.classList.add('light-mode');
+          themeLabel.textContent = 'لؤلؤي';
+          themeToggleBtn.innerHTML = '<span>☀️</span> <span>لؤلؤي</span>';
+        } else {
+          body.classList.remove('light-mode');
+          themeLabel.textContent = 'داكن';
+          themeToggleBtn.innerHTML = '<span>🌙</span> <span>داكن</span>';
+        }
+        localStorage.setItem('hakoomTheme', isLight ? 'light' : 'dark');
+      }
+
+      function toggleTheme() {
+        setTheme(!body.classList.contains('light-mode'));
+      }
+
+      themeToggleBtn?.addEventListener('click', toggleTheme);
+
+      // تحميل الثيم المحفوظ
+      const savedTheme = localStorage.getItem('hakoomTheme');
+      setTheme(savedTheme === 'light');
+
+      // ========== تغيير اللون ==========
+      function setMainColor(color) {
+        root.style.setProperty('--main', color);
+        root.style.setProperty('--main-rgb', hexToRgb(color));
+        localStorage.setItem('hakoomColor', color);
+        // تحديث active
+        document.querySelectorAll('.color-dot').forEach(d => {
+          d.classList.toggle('active', d.getAttribute('data-color') === color);
+        });
+      }
+
+      function hexToRgb(hex) {
+        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result ? `${parseInt(result[1],16)}, ${parseInt(result[2],16)}, ${parseInt(result[3],16)}` : '30,255,168';
+      }
+
+      colorPicker?.addEventListener('click', (e) => {
+        const dot = e.target.closest('.color-dot');
+        if (dot) {
+          setMainColor(dot.getAttribute('data-color'));
+        }
+      });
+
+      const savedColor = localStorage.getItem('hakoomColor') || '#1effa8';
+      setMainColor(savedColor);
+
+      // ========== القائمة الجانبية ==========
+      function openMenu() {
+        sideMenu.classList.add('open');
+        overlay.classList.add('active');
+        burgerBtn.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeMenu() {
+        sideMenu.classList.remove('open');
+        overlay.classList.remove('active');
+        burgerBtn.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+      burgerBtn?.addEventListener('click', () => {
+        sideMenu.classList.contains('open') ? closeMenu() : openMenu();
+      });
+      overlay?.addEventListener('click', closeMenu);
+      sideMenu?.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => closeMenu());
+      });
+
+      // ========== تهيئة ==========
+      renderDaysList();
+      // افتراضياً نبدأ بالرئيسية
+      navigateTo('home');
+
+      // ربط الشعار أيضًا
+      document.querySelector('.logo-link')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        navigateTo('home');
+      });
+    })();
+  </script>
+</body>
+</html>
